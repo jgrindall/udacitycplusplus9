@@ -7,13 +7,13 @@
 #include <memory>
 
 #include "powerupmanager.h"
+#include "poweruptypes.h"
 
-//helper
+//helpers
 int getRandomType() {
-    int NUM_TYPES = 3; // SPEED, GHOST, SCORE. TODO - is there a better way to do this?
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> type_dist(0, NUM_TYPES - 1);
+    std::uniform_int_distribution<> type_dist(0, getNumberOfPowerUpTypes() - 1);
     return type_dist(gen);
 }
 
@@ -35,7 +35,28 @@ PowerUpManager::PowerUpManager(int grid_width, int grid_height) : grid_width(gri
 
 void PowerUpManager::start() {
     _running = true;
+
+    // start the spawn thread
     _spawnThread = std::thread(&PowerUpManager::spawnThread, this);
+}
+
+void PowerUpManager::consumePowerUp(std::shared_ptr<PowerUp> powerup) {
+    // remove powerup from the list
+    auto it = std::find(_powerups.begin(), _powerups.end(), powerup);
+    if (it != _powerups.end()) {
+        _powerups.erase(it);
+    }
+}
+
+void PowerUpManager::check() {
+    if (_powerups.size() < MAX_ALLOWED_POWERUPS && _spawnQueue->getSize() > 0) {
+        _spawnQueue->permitEntryToFirstInQueue();
+        _powerups.push_back(_powerups.front());
+    }
+}
+
+std::vector<std::shared_ptr<PowerUp>> PowerUpManager::getPowerUps() {
+    return _powerups;
 }
 
 void PowerUpManager::stop() {
@@ -69,7 +90,7 @@ void PowerUpManager::spawnThread() {
         };
     
         auto powerup = std::make_shared<PowerUp>(type, position);
-        
+
         std::promise<void> promise;
         _spawnQueue->add(powerup, std::move(promise));
     }

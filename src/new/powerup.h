@@ -2,6 +2,8 @@
 #ifndef POWERUP_H
 #define POWERUP_H
 
+#include "poweruptypes.h"
+
 #include <vector>
 #include <future>
 #include <mutex>
@@ -10,12 +12,6 @@
 struct Point{
     int x;
     int y;
-};
-
-enum PowerUpType{
-    SLOW_DOWN,  // makes it easier for the player
-    GHOST_MODE, // allows passing through walls
-    SCORE_BOOST // gives extra points when you eat food
 };
 
 class PowerUp

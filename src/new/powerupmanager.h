@@ -16,6 +16,7 @@ public:
     PowerUpManager(int grid_width, int grid_height);
     void start();
     void stop();
+    void check();
 
 private:
 

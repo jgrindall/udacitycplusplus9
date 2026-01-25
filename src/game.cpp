@@ -11,7 +11,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height)
       powerup_manager(grid_width, grid_height)
       {
         PlaceFood();
-}
+ }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
                std::size_t target_frame_duration) {
@@ -22,13 +22,16 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  powerup_manager.start();
+
   while (running) {
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake, food, powerup_manager.getPowerUps());
+    powerup_manager.check();
 
     frame_end = SDL_GetTicks();
 
@@ -51,6 +54,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
   }
+
+  powerup_manager.stop();
 }
 
 void Game::PlaceFood() {

@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "poweruptypes.h"
 #include <iostream>
 #include <string>
 
@@ -38,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food, std::vector<std::shared_ptr<PowerUp>> const &powerups) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -73,7 +74,30 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
-}
+
+  // Render powerups
+  for (auto const &powerup : powerups) {
+
+    auto pos = powerup->getPosition();
+    block.x = pos.x * block.w;
+    block.y = pos.y * block.h;
+
+    switch (powerup->getType()) {
+      case PowerUpType::SLOW_DOWN:
+        SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0xFF, 0x00, 0xFF); // Green
+        break;
+      case PowerUpType::GHOST_MODE:
+        SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0xFF, 0xFF); // Magenta
+        break;
+      case PowerUpType::SCORE_BOOST:
+        SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0xFF, 0xFF, 0xFF); // Cyan
+        break;
+      default:
+        SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF); // White
+        break;
+    }
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
   std::string title{"Snake Score: " + std::to_string(score) + " FPS: " + std::to_string(fps)};
