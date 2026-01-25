@@ -13,8 +13,15 @@ class EventQueue
 {
 public:
     int getSize();
+
+    // add to the back
     void add(std::shared_ptr<T> thing, std::promise<void> &&promise);
+
+    // permit entry to the first in the queue
     void permitEntryToFirstInQueue();
+
+    // get the first
+    std::shared_ptr<T> get();
 
 private:
     

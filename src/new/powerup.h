@@ -20,6 +20,7 @@ public:
     PowerUp(PowerUpType type, Point position);
     PowerUpType getType();
     Point getPosition();
+    static int getNumberOfTypes();
 
 private:
     PowerUpType _type;

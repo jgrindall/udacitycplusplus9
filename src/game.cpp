@@ -31,6 +31,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     controller.HandleInput(running, snake);
     Update();
     renderer.Render(snake, food, powerup_manager.getPowerUps());
+
+    // any more to add??
     powerup_manager.check();
 
     frame_end = SDL_GetTicks();
@@ -88,6 +90,18 @@ void Game::Update() {
     // Grow snake and increase speed.
     snake.GrowBody();
     snake.speed += 0.02;
+  }
+
+  // Check if there's a powerup over here
+  auto powerups = powerup_manager.getPowerUps();
+  for (auto const &powerup : powerups) {
+    auto pos = powerup->getPosition();
+    if (pos.x == new_x && pos.y == new_y) {
+      // snake consumes the powerup
+      powerup_manager.remove(powerup);
+      powerup_manager.apply(powerup);
+      std::cout << "Consumed powerup of type: " << powerup->getType() << std::endl;
+    }
   }
 }
 

@@ -5,6 +5,7 @@
 #include <future>
 #include <random>
 #include <memory>
+#include <algorithm>
 
 #include "powerupmanager.h"
 #include "poweruptypes.h"
@@ -13,7 +14,7 @@
 int getRandomType() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> type_dist(0, getNumberOfPowerUpTypes() - 1);
+    std::uniform_int_distribution<> type_dist(0, PowerUp::getNumberOfTypes() - 1);
     return type_dist(gen);
 }
 
@@ -40,7 +41,7 @@ void PowerUpManager::start() {
     _spawnThread = std::thread(&PowerUpManager::spawnThread, this);
 }
 
-void PowerUpManager::consumePowerUp(std::shared_ptr<PowerUp> powerup) {
+void PowerUpManager::remove(std::shared_ptr<PowerUp> powerup) {
     // remove powerup from the list
     auto it = std::find(_powerups.begin(), _powerups.end(), powerup);
     if (it != _powerups.end()) {
@@ -48,10 +49,32 @@ void PowerUpManager::consumePowerUp(std::shared_ptr<PowerUp> powerup) {
     }
 }
 
+void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup) {
+    // apply the effect of the powerup
+    if(!powerup) {
+        return;
+    }
+    PowerUpType type = powerup->getType();
+    // implement effects based on type
+    if(type == PowerUpType::SLOW_DOWN) {
+        std::cout << "Applying SLOW_DOWN effect." << std::endl;
+        // implement effect
+    }
+    else if(type == PowerUpType::GHOST_MODE) {
+        std::cout << "Applying GHOST_MODE effect." << std::endl;
+        // implement effect
+    }
+    else if(type == PowerUpType::SCORE_BOOST) {
+        std::cout << "Applying SCORE_BOOST effect." << std::endl;
+        // implement effect
+    }
+}
+
 void PowerUpManager::check() {
     if (_powerups.size() < MAX_ALLOWED_POWERUPS && _spawnQueue->getSize() > 0) {
+        auto powerup = _spawnQueue->get();
         _spawnQueue->permitEntryToFirstInQueue();
-        _powerups.push_back(_powerups.front());
+        _powerups.push_back(powerup);
     }
 }
 
@@ -67,6 +90,9 @@ void PowerUpManager::stop() {
 }
 
 void PowerUpManager::spawnThread() {
+
+    std::cout << "Spawn thread started." << std::endl;
+
     std::random_device rd;
     std::mt19937 gen(rd());
     
@@ -93,5 +119,7 @@ void PowerUpManager::spawnThread() {
 
         std::promise<void> promise;
         _spawnQueue->add(powerup, std::move(promise));
+
+        std::cout << "Spawned powerup of type " << intType << " at position (" << x << ", " << y << ")." << std::endl;
     }
 }

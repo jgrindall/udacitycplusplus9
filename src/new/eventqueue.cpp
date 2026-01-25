@@ -39,3 +39,15 @@ void EventQueue<T>::permitEntryToFirstInQueue() {
     _things.erase(firstThing);
     _promises.erase(firstPromise);
 }
+
+// get the first one
+template <typename T>
+std::shared_ptr<T> EventQueue<T>::get() {
+    std::lock_guard<std::mutex> lock(_mutex);
+    
+    if (_things.empty()) {
+        return nullptr;
+    }
+    
+    return _things.front();
+}

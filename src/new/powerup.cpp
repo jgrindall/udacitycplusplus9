@@ -20,3 +20,7 @@ PowerUpType PowerUp::getType() {
 Point PowerUp::getPosition() {
     return _position;
 }
+
+int PowerUp::getNumberOfTypes() {
+    return 3;
+}

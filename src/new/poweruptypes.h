@@ -13,8 +13,4 @@ enum PowerUpType{
     SCORE_BOOST // gives extra points when you eat food
 };
 
-int getNumberOfPowerUpTypes() {
-    return 3;
-}
-
 #endif

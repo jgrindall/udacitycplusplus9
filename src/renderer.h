@@ -2,8 +2,10 @@
 #define RENDERER_H
 
 #include <vector>
+#include <memory>
 #include "SDL.h"
 #include "snake.h"
+#include "new/powerup.h"
 
 class Renderer {
  public:
