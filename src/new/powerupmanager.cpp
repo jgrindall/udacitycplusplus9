@@ -35,6 +35,10 @@ PowerUpManager::PowerUpManager(int grid_width, int grid_height) : grid_width(gri
     _spawnQueue = std::make_unique<EventQueue<PowerUp>>();
 }
 
+PowerUpManager::~PowerUpManager() {
+    stop();
+}
+
 void PowerUpManager::start() {
     _running = true;
 
@@ -51,7 +55,7 @@ void PowerUpManager::remove(std::shared_ptr<PowerUp> powerup) {
     }
 }
 
-void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup, Snake* snake, int* score) {
+void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup, Snake& snake, int& score) {
     // apply the effect of the powerup
     if(!powerup) {
         return;
@@ -59,13 +63,13 @@ void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup, Snake* snake, int* 
     PowerUpType type = powerup->getType();
     // implement effects based on type
     if(type == PowerUpType::SLOW_DOWN) {
-        snake->speed = std::max(0.02f, snake->speed - 0.05f);
+        snake.speed = std::max(0.02f, snake.speed - 0.05f);
     }
     else if(type == PowerUpType::GHOST_MODE) {
         // not done yet!!
     }
     else if(type == PowerUpType::EXTRA_SCORE) {
-        *score += 5;
+        score += 5;
     }
 }
 

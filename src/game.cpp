@@ -101,7 +101,7 @@ void Game::Update() {
     if (pos.x == new_x && pos.y == new_y) {
       // snake consumes the powerup
       powerup_manager.remove(powerup);
-      powerup_manager.apply(powerup, &snake, &score);
+      powerup_manager.apply(powerup, snake, score);
       std::cout << "Consumed powerup of type: " << powerup->getType() << std::endl;
     }
   }

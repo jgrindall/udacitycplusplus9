@@ -16,6 +16,7 @@ class PowerUpManager
 {
 public:
     PowerUpManager(int grid_width, int grid_height);
+    ~PowerUpManager();
     
     // start spawning powerups
     void start();
@@ -30,7 +31,7 @@ public:
     void remove(std::shared_ptr<PowerUp> powerup);
 
     // what does it do? 
-    void apply(std::shared_ptr<PowerUp> powerup, Snake* snake, int* score);
+    void apply(std::shared_ptr<PowerUp> powerup, Snake& snake, int& score);
 
     // get the current powerups on screen
     std::vector<std::shared_ptr<PowerUp>> getPowerUps();
