@@ -40,6 +40,14 @@ Used for rendering text
 
 
 
+This builds in my workspace:
+
+
+![screenshot of workspace](https://github.com/jgrindall/udacitycplusplus9/blob/main/workspace.png)
+
+
+
+
 # New features:
 
 All new functionality is in the/src/new/ folder.
