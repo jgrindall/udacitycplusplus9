@@ -18,6 +18,7 @@ class Game {
 
  private:
   Snake snake;
+  // food position (just one food at a time so point)
   SDL_Point food;
   PowerUpManager powerup_manager;
 

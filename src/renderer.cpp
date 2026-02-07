@@ -2,6 +2,7 @@
 #include "new/poweruptypes.h"
 #include <iostream>
 #include <string>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 Renderer::Renderer(const std::size_t screen_width,
                    const std::size_t screen_height,
@@ -32,14 +33,20 @@ Renderer::Renderer(const std::size_t screen_width,
     std::cerr << "Renderer could not be created.\n";
     std::cerr << "SDL_Error: " << SDL_GetError() << "\n";
   }
+
+  // Initialize SDL_ttf for text
+  TTF_Init();
+  font = TTF_OpenFont("../DejaVuSans-Bold.ttf", 24);
 }
 
 Renderer::~Renderer() {
+  TTF_CloseFont(font);
+  TTF_Quit();
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food, std::vector<std::shared_ptr<PowerUp>> const &powerups) {
+void Renderer::Render(Snake const snake, SDL_Point const &food, std::vector<std::shared_ptr<PowerUp>> const &powerups, const int score) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -73,29 +80,47 @@ void Renderer::Render(Snake const snake, SDL_Point const &food, std::vector<std:
   SDL_RenderFillRect(sdl_renderer, &block);
 
   // render powerups
-
-  std::cout << "Rendering " << powerups.size() << " powerups." << std::endl;
   for (auto const &powerup : powerups) {
 
     auto pos = powerup->getPosition();
     block.x = pos.x * block.w;
     block.y = pos.y * block.h;
 
-    switch (powerup->getType()) {
-      case PowerUpType::SLOW_DOWN:
-        SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0xFF, 0x00, 0xFF); // Green
-        break;
-      case PowerUpType::GHOST_MODE:
-        SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0xFF, 0xFF); // Magenta
-        break;
-      case PowerUpType::SCORE_BOOST:
-        SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0xFF, 0xFF, 0xFF); // Cyan
-        break;
-      default:
-        SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF); // White
-        break;
-    }
-    SDL_RenderFillRect(sdl_renderer, &block);
+    int centerX = block.x + block.w / 2;
+    int centerY = block.y + block.h / 2;
+    int radius = block.w / 2;
+
+    filledCircleRGBA(sdl_renderer, centerX, centerY, radius, 0xff, 0xFF, 0xff, 0xFF);
+  }
+
+  
+  // render the score at the top left corner of the screen
+  /** see https://wiki.libsdl.org/SDL3_ttf */
+
+  SDL_Color color = {
+    255,
+    255,
+    255,
+    255
+  };
+
+  auto text = "Snake Score: " + std::to_string(score);
+
+  SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+  SDL_Texture* texture = SDL_CreateTextureFromSurface(sdl_renderer, surface);
+  if (surface == nullptr || texture == nullptr) {
+    std::cout << "Error!";
+  }
+  else{
+    SDL_Rect dest = {
+      8,
+      8, 
+      surface->w, 
+      surface->h
+    };
+    SDL_RenderCopy(sdl_renderer, texture, nullptr, &dest);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(surface);
   }
 
   // Update Screen after all objects are rendered

@@ -30,7 +30,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food, powerup_manager.getPowerUps());
+    renderer.Render(snake, food, powerup_manager.getPowerUps(), score);
 
     // any more to add??
     powerup_manager.check();
@@ -76,7 +76,9 @@ void Game::PlaceFood() {
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+  if (!snake.alive){
+    return;
+  }
 
   snake.Update();
 
@@ -99,11 +101,16 @@ void Game::Update() {
     if (pos.x == new_x && pos.y == new_y) {
       // snake consumes the powerup
       powerup_manager.remove(powerup);
-      powerup_manager.apply(powerup);
+      powerup_manager.apply(powerup, &snake, &score);
       std::cout << "Consumed powerup of type: " << powerup->getType() << std::endl;
     }
   }
 }
 
-int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::GetScore() const {
+  return score;
+}
+
+int Game::GetSize() const {
+  return snake.size;
+}
