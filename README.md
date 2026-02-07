@@ -104,69 +104,88 @@ powerupmanager.cpp:L32
 
 * All class data members are explicitly specified as public, protected, or private.
 
-See 
+See
+```
 powerupmanager.cpp/h, eventqueue.cpp/h, powerup.cpp/h
-
+```
 
 
 * Templates generalize functions or classes in the project.
 
 
-See 
+See
+``` 
 eventqueue.cpp/h - template <typename T> class EventQueue
-
+```
 
 * Classes abstract implementation details from their interfaces.
 
 See 
+```
 powerupmanager.cpp/h, eventqueue.cpp/h
-
+```
 
 
 * The project makes use of references in function declarations.
 
-See PowerUpManager::apply
+See 
 
+```
+PowerUpManager::apply
+```
 
 
 * The project uses destructors appropriately.
 
-See ~PowerUpManager()
+See 
+
+```
+~PowerUpManager()
+```
 
 
 
 * The project uses move semantics to move data instead of copying it, where possible.
 
 See
-
+```
 eventqueue.cppL24 - _promises.push_back(std::move(promise))
 powerupmanager.cppL127 - _spawnQueue->add(powerup, std::move(promise))
-
+```
 
 
 * The project uses smart pointers instead of raw pointers.
 
 See
+
+```
 powerupmanager.hL50 - std::unique_ptr<EventQueue<PowerUp>> _spawnQueue
 powerupmanager.cppL34 - std::make_unique<EventQueue<PowerUp>>()
-
+```
 
 * The project uses multithreading.
 
-See eventqueue.cpp and powerupmanager.cpp
+See
+
+```
+eventqueue.cpp and powerupmanager.cpp
+```
 
 
 
 
 * A promise and future is used in the project.
 
-See eventqueue.cpp
-
+See 
+```
+eventqueue.cpp
+```
 
 * A mutex or lock is used in the project.
 
 See
-
+```
 eventqueue.cppL14 - Protects queue access in getSize()
 eventqueue.cppL21 - Protects queue access in add()
 eventqueue.cppL29 - Protects queue access in permitEntryToFirstInQueue()
+```
