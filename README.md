@@ -71,7 +71,12 @@ These spawn each 5 seconds
 
 * The project demonstrates an understanding of C++ functions and control structures.
 
-See powerupmanager.cpp and eventqueue.cpp
+See 
+
+```
+powerupmanager.cpp 
+eventqueue.cpp
+```
 
 
 
@@ -80,12 +85,12 @@ See powerupmanager.cpp and eventqueue.cpp
 * The project uses data structures and immutable variables.
 
 See
-
+```
 powerupmanager.h:L47 - std::vector<std::shared_ptr<PowerUp>> _powerups
 eventqueue.h:L28 - std::vector<std::shared_ptr<T>> _things
 eventqueue.h:L31 - std::vector<std::promise<void>> _promises
 powerupmanager.h:L45 - const int MAX_ALLOWED_POWERUPS = 3
-
+```
 
 
 
@@ -95,12 +100,19 @@ powerupmanager.h:L45 - const int MAX_ALLOWED_POWERUPS = 3
 * Classes are organized with attributes to hold data and methods to perform tasks.
 
 See 
-powerupmanager.cpp/h, eventqueue.cpp/h, powerup.cpp/h
+
+```
+powerupmanager.cpp/h
+eventqueue.cpp/h
+powerup.cpp/h
+```
 
 
 * Class constructors utilize member initialization lists.
-
+```
 powerupmanager.cpp:L32
+```
+
 
 * All class data members are explicitly specified as public, protected, or private.
 
