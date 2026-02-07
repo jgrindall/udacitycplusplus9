@@ -20,14 +20,22 @@
 
 2. Install dependencies
 
+```
 sudo apt-get install libsdl2-gfx-dev
+```
 Used for drawing circles
 
+```
 sudo apt-get install libsdl2-ttf-dev
+```
 Used for rendering text
 
-3. Make a build directory in the top level directory: `mkdir build && cd build`
+3. Make a build directory in the top level directory: 
+
+`mkdir build && cd build`
+
 4. Compile: `cmake .. && make`
+
 5. Run it: `./SnakeGame`.
 
 
