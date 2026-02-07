@@ -10,6 +10,8 @@
 #include "powerup.h"
 #include "eventqueue.h"
 
+class Snake;
+
 class PowerUpManager
 {
 public:
@@ -27,8 +29,8 @@ public:
     // snake ate it
     void remove(std::shared_ptr<PowerUp> powerup);
 
-    // what does it do?
-    void apply(std::shared_ptr<PowerUp> powerup);
+    // what does it do? 
+    void apply(std::shared_ptr<PowerUp> powerup, Snake* snake, int* score);
 
     // get the current powerups on screen
     std::vector<std::shared_ptr<PowerUp>> getPowerUps();

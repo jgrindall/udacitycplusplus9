@@ -8,9 +8,9 @@
 #include <memory>
 
 enum PowerUpType{
-    SLOW_DOWN,  // makes it easier for the player
-    GHOST_MODE, // allows passing through walls
-    SCORE_BOOST // gives extra points when you eat food
+    SLOW_DOWN,  // makes it easier for the player!
+    GHOST_MODE, // allows passing through walls - not done yet
+    EXTRA_SCORE // extra points
 };
 
 #endif

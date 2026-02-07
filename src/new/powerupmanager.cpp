@@ -9,6 +9,7 @@
 
 #include "powerupmanager.h"
 #include "poweruptypes.h"
+#include "../snake.h"
 
 //helpers
 int getRandomType() {
@@ -45,11 +46,12 @@ void PowerUpManager::remove(std::shared_ptr<PowerUp> powerup) {
     // remove powerup from the list
     auto it = std::find(_powerups.begin(), _powerups.end(), powerup);
     if (it != _powerups.end()) {
+        // foiund it
         _powerups.erase(it);
     }
 }
 
-void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup) {
+void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup, Snake* snake, int* score) {
     // apply the effect of the powerup
     if(!powerup) {
         return;
@@ -57,16 +59,13 @@ void PowerUpManager::apply(std::shared_ptr<PowerUp> powerup) {
     PowerUpType type = powerup->getType();
     // implement effects based on type
     if(type == PowerUpType::SLOW_DOWN) {
-        std::cout << "Applying SLOW_DOWN effect." << std::endl;
-        // implement effect
+        snake->speed = std::max(0.02f, snake->speed - 0.05f);
     }
     else if(type == PowerUpType::GHOST_MODE) {
-        std::cout << "Applying GHOST_MODE effect." << std::endl;
-        // implement effect
+        // not done yet!!
     }
-    else if(type == PowerUpType::SCORE_BOOST) {
-        std::cout << "Applying SCORE_BOOST effect." << std::endl;
-        // implement effect
+    else if(type == PowerUpType::EXTRA_SCORE) {
+        *score += 5;
     }
 }
 
@@ -89,6 +88,9 @@ void PowerUpManager::stop() {
     }
 }
 
+/**
+ * Runs in a separate thread to spawn powerups at regular intervals.
+ */
 void PowerUpManager::spawnThread() {
 
     std::cout << "Spawn thread started." << std::endl;
